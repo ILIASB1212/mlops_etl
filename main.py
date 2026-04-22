@@ -19,6 +19,7 @@ if __name__=="__main__":
         logger.info("initiations")
         data_ingestion_artifact=data_ingestion.initiate_data_ingestion()
         print(data_ingestion_artifact)
+        logger.info("data_ingestion_completed :::::")
 
     except Exception as e:
             logger.error(f"Error in main file: {e}")

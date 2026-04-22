@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 
-DATA_INGESTION_COLLECTION_NAME:str="security_data"
+DATA_INGESTION_COLLECTION_NAME:str="network_security_collection"
 DATA_INGESTION_DATABASE_NAME:str="ilias_database"
 DATA_INGESTION_DIR_NAME:str="data_ingestion_dir"
 DATA_INGESTION_FEATURE_STORE_NAME:str="feature_store"

@@ -26,7 +26,7 @@ logger=get_logger(__name__)
 class DataIngestion:
     def __init__(self,data_ingestion_config:DataIngestionConfig):
         try:
-            self.data_ingestion_config=DataIngestionConfig
+            self.data_ingestion_config=data_ingestion_config
             logger.info(f"DataIngestionConfig class initiated")
         except Exception as e:
             logger.error(f"Error in DataIngestion: {e}")
@@ -39,7 +39,12 @@ class DataIngestion:
         self.mongodb_client=MongoClient(uri)
         self.db=self.mongodb_client[self.datbase_name]
         collection=self.db[self.collection_name]
+
+        count = collection.count_documents({})
+        logger.info(f"Documents found in collection: {count}")
+
         df=pd.DataFrame(list(collection.find()))
+        logger.info(f"DataFrame shape: {df.shape}")
         logger.info(f"Data loaded from MongoDB collection: {self.collection_name} in database: {self.datbase_name}")
         if "_id" in df.columns.to_list():
             df.drop("_id",axis=1,inplace=True)
@@ -53,8 +58,8 @@ class DataIngestion:
         try:
             feature_store_file_path=self.data_ingestion_config.feature_store_file_path
             os.makedirs(os.path.dirname(feature_store_file_path),exist_ok=True)
-            df=record.to_csv(feature_store_file_path,index=False,header=True)
-            return df
+            record.to_csv(feature_store_file_path,index=False,header=True)
+            return record
         except Exception as e:
             logger.error(f"Error in DataIngestion: {e}")
             raise CustomException(f"Error occurred while initializing DataIngestion : {e}", sys)
@@ -93,9 +98,10 @@ class DataIngestion:
         try:
             self.database=self.load_records_as_dataframe()
             self.dataframe=self.export_to_feature_store(self.database)
-            self.split=self.split_data_as_train_test(self.dataframe)
+            self.split_data_as_train_test(self.dataframe)
             data_ingestion_model=DataIngestionArtifactes(train_file_path=self.data_ingestion_config.training_file_path,
                                                          test_file_path=self.data_ingestion_config.testing_file_path)
+            return data_ingestion_model
         except Exception as e:
             logger.error(f"Error in DataIngestion: {e}")
             raise CustomException(f"Error occurred while initializing DataIngestion : {e}", sys)

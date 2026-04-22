@@ -1,39 +1,29 @@
+from networksecurity.exeption.costum_expection import CustomException
+from networksecurity.logging.loger import get_logger
 from pymongo.mongo_client import MongoClient
+from dotenv import load_dotenv
+import pandas as pd
 import certifi
 import dotenv
+import json
+import sys
 import os
 
-dotenv.load_dotenv()
+
+
+load_dotenv()
 uri = os.getenv("MONGO_DB_URI")
-
-# Pass certifi's CA bundle explicitly
-client = MongoClient(uri, tlsCAFile=certifi.where())
-
-try:
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
-
-
-
 ca=certifi.where()
 
 
 
-from networksecurity.exeption.costum_expection import CustomException
-from networksecurity.logging.loger import get_logger
-import sys
-import pandas as pd
-import json
-from push_data import client
 
 logger=get_logger(__name__)
 
 class NetworkDataExtract:
     def __init__(self):
         try:
-            pass
+            logger.info("NetworkDataExtract class initiated")
         except Exception as e:
             logger.error(f"Error in NetworkDataExtract: {e}")
             raise CustomException(f"Error occurred while extracting network data : {e}", sys)
@@ -42,9 +32,10 @@ class NetworkDataExtract:
         try:
             if data_path.endswith('.csv'):
                 logger.info(f"CSV file found at path: {data_path}")
-                data=pd.read_csv(data_path)
-                data.reset_index(inplace=True,drop=True)
-                records=list(json.loads(data.T.to_json()).values())
+                data=pd.read_csv(data_path) # load data as csv
+                data.reset_index(inplace=True,drop=True) #remove index 
+                records=list(json.loads(data.T.to_json()).values()) #convert to list of jsons
+                logger.info(f"data loaded to mongo db")
                 return records
         except Exception as e:
             logger.error(f"Error in csv_tojson: {e}")
