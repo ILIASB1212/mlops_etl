@@ -4,7 +4,6 @@ import os
 from networksecurity.constant import training_pipeline
 from networksecurity.exeption.costum_expection import CustomException
 from networksecurity.logging.loger import get_logger
-from mlvuenv.Lib.asyncio.log import logger
 
 
 logger=get_logger(__name__)
@@ -25,15 +24,14 @@ class TrainingPipelineConfig:
         self.pipeline_name=training_pipeline.PIPELINE_NAME
         self.artifact_name=training_pipeline.ARTIFACTS_DIR
         self.artifact_dir=os.path.join(self.artifact_name,timestamp)
+        self.model_dir=os.path.join("final_model")
         self.timestamp=timestamp
         
 
 class DataIngestionConfig:
     def __init__(self,training_pipelien_onfig:TrainingPipelineConfig):
-        self.training_pipeline:str=os.path.join(
-            training_pipelien_onfig.artifact_dir,
-            training_pipeline.DATA_INGESTION_DIR_NAME
-        )
+        self.data_ingestion_dir:str=os.path.join(training_pipelien_onfig.artifact_dir,training_pipeline.DATA_INGESTION_DIR_NAME
+            )
         self.feature_store_file_path: str = os.path.join(
                 self.data_ingestion_dir, training_pipeline.DATA_INGESTION_FEATURE_STORE_NAME, training_pipeline.DATA_FILENAME
             )
