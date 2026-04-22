@@ -1,0 +1,13 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+mlflow
+google-cloud-storage
+ipykernel
+xgboost
+dill
+python-dotenv
+pymongo[srv]==3.12
+certifi
