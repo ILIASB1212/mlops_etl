@@ -27,12 +27,13 @@ import mlflow
 from urllib.parse import urlparse
 
 import dagshub
-#dagshub.init(repo_owner='krishnaik06', repo_name='networksecurity', mlflow=True)
+dagshub.init(repo_owner='ILIASB1212', repo_name='mlops_etl', mlflow=True)
 
 
 
 
-logging=get_logger(__name__)
+
+logs=get_logger(__name__)
 
 
 
@@ -45,9 +46,9 @@ class ModelTrainer:
             raise CustomException(e,sys)
         
     def track_mlflow(self,best_model,classificationmetric):
-        os.environ["MLFLOW_TRACKING_URI"]="https://dagshub.com/krishnaik06/networksecurity.mlflow"
-        os.environ["MLFLOW_TRACKING_USERNAME"]="krishnaik06"
-        os.environ["MLFLOW_TRACKING_PASSWORD"]="7104284f1bb44ece21e0e2adb4e36a250ae3251f"
+        os.environ["MLFLOW_TRACKING_URI"]="https://dagshub.com/ILIASB1212/mlops_etl.mlflow"
+        os.environ["MLFLOW_TRACKING_USERNAME"]="ILIASB1212"
+        os.environ["MLFLOW_TRACKING_PASSWORD"]="da8291a7a36881ef146414d62fd5c31fd7e809f0"
 
         
         mlflow.set_registry_uri("https://dagshub.com/krishnaik06/networksecurity.mlflow")
@@ -123,6 +124,7 @@ class ModelTrainer:
             list(model_report.values()).index(best_model_score)
         ]
         best_model = models[best_model_name]
+        logs.info(f"best_model selected is : {best_model}")
         y_train_pred=best_model.predict(X_train)
 
         classification_train_metric=get_classification_score(y_true=y_train,y_pred=y_train_pred)
@@ -152,7 +154,7 @@ class ModelTrainer:
                              train_metric_artifact=classification_train_metric,
                              test_metric_artifact=classification_test_metric
                              )
-        logging.info(f"Model trainer artifact: {model_trainer_artifact}")
+        logs.info(f"Model trainer artifact: {model_trainer_artifact}")
         return model_trainer_artifact
 
 
