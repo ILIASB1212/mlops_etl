@@ -3,8 +3,11 @@ from networksecurity.constant.training_pipeline import SAVED_MODEL_DIR,MODEL_FIL
 import os
 import sys
 
-from networksecurity.exception.exception import NetworkSecurityException
-from networksecurity.logging.logger import logging
+from networksecurity.exeption.costum_expection import CustomException
+
+from networksecurity.logging.loger import get_logger
+
+logging=get_logger(__name__)
 
 class NetworkModel:
     def __init__(self,preprocessor,model):
