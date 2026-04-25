@@ -41,8 +41,9 @@ if __name__=="__main__":
 
         logger.info("data training  initiated ::::")
         model_trainner_config=ModelTrainerConfig(data_training_pipeline)
-        model_trainner=ModelTrainer(data_transformation_artifacts,model_trainner_config)
-        model_trainner_artifacts=data_transformation.initiate_data_transformation()
+        # CORRECT - config first, then artifact
+        model_trainner = ModelTrainer(model_trainner_config, data_transformation_artifacts)
+        model_trainner_artifacts=model_trainner.initiate_model_trainer()
         logger.info("data training completed ::::")
         print("2)))))data training done ")
 
